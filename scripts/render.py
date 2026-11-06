@@ -17,7 +17,7 @@ def main():
     if len(sys.argv) < 2:
         sys.exit(__doc__)
     shot = ROOT / "blender" / "shots" / f"{sys.argv[1]}.py"
-    cmd = [BLENDER, "-b", "--factory-startup", "-t", "6", "--python-exit-code", "1",
+    cmd = [BLENDER, "-b", "--factory-startup", "-t", os.environ.get("RENDER_THREADS", "6"), "--python-exit-code", "1",
            "--python", str(shot), "--", *sys.argv[2:]]
     flags = getattr(subprocess, "BELOW_NORMAL_PRIORITY_CLASS", 0)
     p = subprocess.run(cmd, creationflags=flags, capture_output=True, text=True, encoding="utf-8", errors="replace")
