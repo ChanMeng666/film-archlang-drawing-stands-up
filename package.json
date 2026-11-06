@@ -1,0 +1,15 @@
+{
+  "name": "archlang-cinematic",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Cinematic, Blender-rendered promo stills and films of plans compiled by ArchLang.",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@chanmeng666/archlang": "1.56.0",
+    "@chanmeng666/archlang-3d": "0.3.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "2.6.2"
+  }
+}

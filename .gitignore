@@ -1,0 +1,9 @@
+node_modules/
+build/
+out/
+*.blend1
+__pycache__/
+
+# Audio media (re-download with: python audio/fetch.py). Mixkit licence forbids standalone redistribution.
+audio/music/
+audio/sfx/
