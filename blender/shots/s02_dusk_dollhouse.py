@@ -9,6 +9,7 @@ PLAN = "courtyard-house"
 F_END = 168  # 7 s
 
 a = lib.args()
+V = a.aspect == "9x16"
 lib.reset()
 sc = lib.setup_render(a, frames=(1, F_END))
 
@@ -51,8 +52,9 @@ cam.dof(0.9)
 
 def cam_at(f):
     t = lib.smooth(f / F_END)
-    cam.place(centre, lib.lerp(36, 31, t), lib.lerp(44, 36, t), lib.lerp(40, 112, t),
-              lib.Cam.lens_for_width(lib.lerp(25, 22, t), lib.lerp(36, 31, t)), frame=f)
+    w0, w1, e0, e1 = (21.5, 19, 52, 44) if V else (25, 22, 44, 36)
+    cam.place(centre, lib.lerp(36, 31, t), lib.lerp(e0, e1, t), lib.lerp(40, 112, t),
+              lib.Cam.lens_for_width(lib.lerp(w0, w1, t), lib.lerp(36, 31, t)), frame=f)
 
 
 lib.keyframes(1, F_END, cam_at)

@@ -35,6 +35,7 @@ def args():
     p.add_argument("--aspect", choices=["16x9", "9x16", "1x1"], default="16x9")
     p.add_argument("--frames", default=None, help="F0-F1 subrange for --anim")
     p.add_argument("--tag", default="", help="suffix for still filenames")
+    p.add_argument("--step", type=int, default=1, help="frame step for --anim (framing checks)")
     return p.parse_args(argv)
 
 
@@ -537,6 +538,7 @@ def run(shot: str, a):
     if a.anim:
         if a.frames:
             sc.frame_start, sc.frame_end = (int(v) for v in a.frames.split("-"))
+        sc.frame_step = a.step
         sc.render.filepath = str(d / "frames" / "f_####")
         sc.render.use_overwrite = False  # resumable
         sc.render.use_placeholder = True

@@ -10,6 +10,7 @@ PLAN = "hillside-villa"
 F_END = 144  # 6 s
 
 a = lib.args()
+V = a.aspect == "9x16"
 lib.reset()
 sc = lib.setup_render(a, frames=(1, F_END))
 sc.view_settings.exposure = -0.2
@@ -55,7 +56,7 @@ def cam_at(f):
     tgt = centre.copy()
     tgt.z = lib.lerp(2.5, 11.5, lib.smooth((f - 18) / 66))
     cam.place(tgt, 120, 30, lib.lerp(28, 62, t), 50, frame=f)
-    cam.data.ortho_scale = lib.lerp(31, 50, lib.smooth((f - 18) / 66))
+    cam.data.ortho_scale = lib.lerp(*((29, 30) if V else (31, 50)), lib.smooth((f - 18) / 66))
     cam.data.keyframe_insert("ortho_scale", frame=f)
 
 

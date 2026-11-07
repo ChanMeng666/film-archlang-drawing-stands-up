@@ -9,6 +9,7 @@ PLAN = "courtyard-house"
 F_END = 156  # 6.5 s @ 24
 
 a = lib.args()
+V = a.aspect == "9x16"  # vertical: re-framed here, never cropped
 lib.reset()
 sc = lib.setup_render(a, frames=(1, F_END))
 sc.view_settings.exposure = -0.4
@@ -43,7 +44,7 @@ for i, o in enumerate(furn):
 # ---- camera: straight-down "this is the PNG" → low golden three-quarter ----
 cam = lib.Cam()
 cam.dof(0.6)
-sheet_w = 30.0  # metres of sheet across the frame at the start
+sheet_w = 24.0 if V else 30.0  # metres of sheet across the frame at the start
 top = {"target": lib.Vector(((vb[0] + vb[2] / 2) / 1000, -(vb[1] + vb[3] / 2) / 1000, 0))}
 
 
@@ -51,12 +52,16 @@ def cam_at(f):
     t = lib.smooth((f - 20) / (F_END - 20))
     tgt = centre
     dist = lib.lerp(320.0, 34.0, lib.ease_out(t, 2))
-    elev = lib.lerp(89.9, 31.0, t)
+    elev = lib.lerp(89.9, 40.0 if V else 31.0, t)
     azim = lib.lerp(0.0, 34.0, t)
-    width = lib.lerp(sheet_w, 22.0, t)
+    width = lib.lerp(sheet_w, 25.0 if V else 22.0, t)
     lens = lib.Cam.lens_for_width(width, dist)
-    shift_x = 0.0 if a.still else lib.lerp(-0.19, 0.0, lib.smooth((f - 60) / 50))  # film: plan right of the code panel
-    cam.place(tgt, dist, elev, azim, lens, frame=f, shift=(shift_x, 0.0))
+    move = 0.0 if a.still else lib.smooth((f - 60) / 50)
+    if V:  # film: plan below the code panel
+        shift = (0.0, lib.lerp(0.36, 0.0, move))
+    else:  # film: plan right of the code panel
+        shift = (lib.lerp(-0.19, 0.0, move), 0.0)
+    cam.place(tgt, dist, elev, azim, lens, frame=f, shift=shift)
 
 
 lib.keyframes(1, F_END, cam_at)

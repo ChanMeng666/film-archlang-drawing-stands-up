@@ -1,11 +1,14 @@
 """Final 1080p film render, gentle on a shared laptop.
 
 One Blender at a time, below-normal priority, RENDER_THREADS threads (default 4). Before each
-shot it waits until at least MIN_FREE_GB of physical memory is free. Frames resume: rerun after
-any interruption. Then composes the film. Log: out/film/render-final.log
+shot it waits until at least MIN_FREE_GB of physical memory is free. While a shot renders, a
+watchdog stops Blender if free memory stays under LOW_FREE_GB for a minute, waits for
+MIN_FREE_GB again and resumes; frames already written are kept. Then composes the film.
+Log: out/film/render-final.log
 
-  python scripts/render_final.py
+  python scripts/render_final.py [--aspect 16x9|9x16]
 """
+import argparse
 import ctypes
 import os
 import subprocess
@@ -16,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SHOTS = [("s01_stands_up", 156), ("s02_dusk_dollhouse", 168), ("s04_exploded_axon", 144), ("s03_city_of_code", 192)]
 MIN_FREE_GB = float(os.environ.get("MIN_FREE_GB", "2.0"))
+LOW_FREE_GB = float(os.environ.get("LOW_FREE_GB", "1.0"))
 LOG = ROOT / "out" / "film" / "render-final.log"
 
 
@@ -42,8 +46,8 @@ def log(msg):
         f.write(line + "\n")
 
 
-def done(shot, n):
-    d = ROOT / "out" / "renders" / f"{shot}-16x9-final" / "frames"
+def done(shot, aspect):
+    d = ROOT / "out" / "renders" / f"{shot}-{aspect}-final" / "frames"
     if not d.exists():
         return 0
     for z in d.glob("f_*.png"):  # placeholders left by an interrupted run
@@ -52,26 +56,56 @@ def done(shot, n):
     return sum(1 for f in d.glob("f_*.png") if f.stat().st_size > 1024)
 
 
+def wait_for_memory():
+    while free_gb() < MIN_FREE_GB:
+        log(f"waiting: {free_gb():.1f} GB free < {MIN_FREE_GB} GB")
+        time.sleep(120)
+
+
+def render(shot, aspect):
+    """One Blender run. Returns its exit code, or None if the watchdog stopped it for memory."""
+    p = subprocess.Popen([sys.executable, str(ROOT / "scripts" / "render.py"), shot, "--anim", "--quality", "final",
+                          "--aspect", aspect])
+    low_since = None
+    while p.poll() is None:
+        time.sleep(10)
+        if free_gb() < LOW_FREE_GB:
+            low_since = low_since or time.time()
+            if time.time() - low_since > 60:
+                subprocess.run(["taskkill", "/T", "/F", "/PID", str(p.pid)], capture_output=True)
+                p.wait()
+                return None
+        else:
+            low_since = None
+    return p.returncode
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--aspect", default="16x9", choices=["16x9", "9x16"])
+    aspect = ap.parse_args().aspect
     os.environ.setdefault("RENDER_THREADS", "4")
     for shot, n in SHOTS:
-        have = done(shot, n)
+        have = done(shot, aspect)
         if have >= n:
-            log(f"{shot}: already complete ({have}/{n})")
+            log(f"{shot}-{aspect}: already complete ({have}/{n})")
             continue
-        while free_gb() < MIN_FREE_GB:
-            log(f"waiting: {free_gb():.1f} GB free < {MIN_FREE_GB} GB")
-            time.sleep(120)
-        log(f"{shot}: start ({have}/{n} done, {free_gb():.1f} GB free, {os.environ['RENDER_THREADS']} threads)")
         t = time.time()
-        r = subprocess.run([sys.executable, str(ROOT / "scripts" / "render.py"), shot, "--anim", "--quality", "final"])
-        have = done(shot, n)
-        log(f"{shot}: exit {r.returncode}, {have}/{n} frames, {(time.time() - t) / 60:.1f} min")
+        while True:
+            wait_for_memory()
+            log(f"{shot}-{aspect}: start ({have}/{n} done, {free_gb():.1f} GB free, {os.environ['RENDER_THREADS']} threads)")
+            rc = render(shot, aspect)
+            have = done(shot, aspect)
+            if rc is not None:
+                break
+            log(f"{shot}-{aspect}: paused at {have}/{n}, free memory under {LOW_FREE_GB} GB for a minute")
+        log(f"{shot}-{aspect}: exit {rc}, {have}/{n} frames, {(time.time() - t) / 60:.1f} min")
         if have < n:
             log("stopping: shot incomplete; rerun this script to resume")
             sys.exit(1)
-    log("composing film")
-    r = subprocess.run([sys.executable, str(ROOT / "compose" / "film.py"), "--quality", "final", "--music", "a-new-life"])
+    log(f"composing film {aspect}")
+    r = subprocess.run([sys.executable, str(ROOT / "compose" / "film.py"), "--quality", "final", "--music", "a-new-life",
+                        "--aspect", aspect])
     log(f"compose exit {r.returncode}")
     sys.exit(r.returncode)
 

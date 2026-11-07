@@ -1,9 +1,9 @@
 """Compose the hero film: Blender frames + 2D type + end card, then score and encode.
 
-  python compose/film.py [--quality review|final|preview] [--music a-new-life|discover|mountains]
+  python compose/film.py [--quality review|final|preview] [--music a-new-life|discover|mountains] [--aspect 16x9|9x16]
 
-Reads   out/renders/<shot>-16x9-<quality>/frames/f_####.png
-Writes  out/film/hero-16x9-<quality>.mp4 (+ a poster PNG)
+Reads   out/renders/<shot>-<aspect>-<quality>/frames/f_####.png
+Writes  out/film/hero-<aspect>-<quality>-<music>.mp4
 Captions state only facts read from the compiler (build/facts/*.json) or the source files.
 """
 import argparse
@@ -50,14 +50,17 @@ def facts(name):
 # ------------------------------------------------------------------ type
 
 class Type:
-    def __init__(self, w):
-        self.s = w / 1920
+    def __init__(self, w, h):
+        self.v = h > w  # vertical: larger type, titles break at double spaces
+        self.s = w / 1270 if self.v else w / 1920
         s = self.s
         self.h1 = font("InterDisplay-Bold.ttf", int(74 * s))
         self.h2 = font("InterDisplay-SemiBold.ttf", int(40 * s))
         self.kick = font("JetBrainsMono-Medium.ttf", int(24 * s))
-        self.code = font("JetBrainsMono-Regular.ttf", int(19 * s))
-        self.code_b = font("JetBrainsMono-Bold.ttf", int(19 * s))
+        cs = int((24 if self.v else 19) * s)
+        self.code = font("JetBrainsMono-Regular.ttf", cs)
+        self.code_b = font("JetBrainsMono-Bold.ttf", cs)
+        self.code_lh = int(cs * 1.52) if self.v else int(29 * s)
 
 
 def alpha_for(f, f0, f1, ramp=9):
@@ -80,33 +83,42 @@ def caption(img, T, f, f0, f1, title, kicker=None, ink="dark", pos="bl"):
     grad = grad.resize((img.width, scrim_h))
     if pos == "bl":
         img.alpha_composite(grad, (0, img.height - scrim_h))
+    else:
+        img.alpha_composite(grad.transpose(Image.Transpose.FLIP_TOP_BOTTOM), (0, 0))
+    lines = title.split("  ") if T.v else [title]
+    lh = int(86 * s)
     lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
     rise = int((1 - min(1, (f - f0) / 12)) * 18 * s)
     col = INK if ink == "dark" else (255, 255, 255)
     shadow = (255, 255, 255, int(110 * a)) if ink == "dark" else (0, 0, 0, int(150 * a))
     x = int(96 * s)
-    y = img.height - int(150 * s) + rise if pos == "bl" else int(96 * s) + rise
+    if pos == "bl":  # vertical: clear of the social app's bottom bar
+        y = img.height - int((400 if T.v else 150) * s) - lh * (len(lines) - 1) + rise
+    else:
+        y = int((250 if T.v else 96) * s) + rise
     if kicker:
         d.rectangle([x, y - int(54 * s), x + int(10 * s), y - int(28 * s)], fill=(*PLUM, int(255 * a)))
         d.text((x + int(22 * s), y - int(58 * s)), kicker, font=T.kick, fill=(*col, int(230 * a)))
-    for dx, dy in ((2, 2), (0, 0)):
-        fill = shadow if (dx, dy) != (0, 0) else (*col, int(255 * a))
-        d.text((x + dx * s, y + dy * s), title, font=T.h1, fill=fill)
+    for i, ln in enumerate(lines):
+        for dx, dy in ((2, 2), (0, 0)):
+            fill = shadow if (dx, dy) != (0, 0) else (*col, int(255 * a))
+            d.text((x + dx * s, y + i * lh + dy * s), ln.strip(), font=T.h1, fill=fill)
     img.alpha_composite(lay)
 
 
 def code_panel(img, T, f, lines, f0=1, f1=78):
-    """Real source lines, typed in, on a Void panel at the left."""
+    """Real source lines, typed in, on a Void panel at the left (top in vertical)."""
     a = alpha_for(f, f0, f1, ramp=8)
     if a <= 0:
         return
     s = T.s
     lay = Image.new("RGBA", img.size, (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
-    x0, y0 = int(64 * s), int(64 * s)
-    lh = int(29 * s)
-    maxc = 46
+    x0, y0 = (int(56 * s), int(170 * s)) if T.v else (int(64 * s), int(64 * s))
+    lh = T.code_lh
+    cw = ImageDraw.Draw(img).textlength("M", font=T.code)
+    maxc = int((img.width - 2 * x0 - 52 * s) / cw) if T.v else 46
     shown = [ln if len(ln) <= maxc else ln[: maxc - 1] + "…" for ln in lines[:22]]
     w = int(52 * s) + int(ImageDraw.Draw(img).textlength("M" * maxc, font=T.code))
     h = int(70 * s) + lh * len(shown)
@@ -140,7 +152,7 @@ def end_card(size, T, f, bg_src: Path):
     pop = 1 + 0.05 * max(0.0, 1 - f / 16)
     ww = int(820 * s * pop)
     word = word.resize((ww, int(word.height * ww / word.width)))
-    cy = int(h * 0.36)
+    cy = int(h * (0.40 if T.v else 0.36))
     a1 = min(1.0, f / 10)
     word.putalpha(word.getchannel("A").point(lambda v: int(v * a1)))
     img.alpha_composite(word, ((w - word.width) // 2, cy - word.height // 2))
@@ -216,10 +228,11 @@ def main():
     ap.add_argument("--quality", default="review")
     ap.add_argument("--music", default="a-new-life", choices=list(MUSIC))
     ap.add_argument("--only-audio", action="store_true")
+    ap.add_argument("--aspect", default="16x9", choices=["16x9", "9x16"])
     a = ap.parse_args()
 
     out = ROOT / "out" / "film"
-    frames_dir = out / f"frames-{a.quality}"
+    frames_dir = out / (f"frames-{a.quality}" if a.aspect == "16x9" else f"frames-{a.aspect}-{a.quality}")
     frames_dir.mkdir(parents=True, exist_ok=True)
     court, city = facts("courtyard-house"), sorted((ROOT / "build" / "facts").glob("*.json"))
     n_code = len(code_lines(ROOT / "plans" / "courtyard-house.arch"))
@@ -236,37 +249,39 @@ def main():
 
     if not a.only_audio:
         k = 0
-        T = None
+        T = size = None
         last_city = None
         for si, (name, nf, ink) in enumerate(SHOTS):
-            src = ROOT / "out" / "renders" / f"{name}-16x9-{a.quality}" / "frames"
+            src = ROOT / "out" / "renders" / f"{name}-{a.aspect}-{a.quality}" / "frames"
+            top = "tl" if a.aspect == "9x16" and name != "s01_stands_up" else "bl"  # vertical: over the sky
             for f in range(1, nf + 1):
                 img = Image.open(src / f"f_{f:04d}.png").convert("RGBA")
-                T = T or Type(img.width)
+                T = T or Type(img.width, img.height)
+                size = img.size
                 if name == "s01_stands_up":
                     code_panel(img, T, f, lines)
                     caption(img, T, f, 84, 154, "Then it stood up.", "archlang3d build", ink)
                     caption(img, T, f, 6, 72, "This plan is text.", "archlang compile", ink, pos="bl")
                 elif name == "s02_dusk_dollhouse":
-                    caption(img, T, f, 20, 160, f"{n_code} lines.  {rooms} rooms.  {area} m².", "describe --json", ink)
+                    caption(img, T, f, 20, 160, f"{n_code} lines.  {rooms} rooms.  {area} m².", "describe --json", ink, pos=top)
                 elif name == "s03_city_of_code":
-                    caption(img, T, f, 40, 186, f"{len(city)} buildings.  None drawn by hand.", "every one compiled from .arch", ink)
+                    caption(img, T, f, 40, 186, f"{len(city)} buildings.  None drawn by hand.", "every one compiled from .arch", ink, pos=top)
                     if f == nf:
                         last_city = src / f"f_{f:04d}.png"
                 elif name == "s04_exploded_axon":
-                    caption(img, T, f, 24, 140, "One file. Every layer.", "slab · floors · furniture · walls · roof", ink)
+                    caption(img, T, f, 24, 140, "One file. Every layer.", "slab · floors · furniture · walls · roof", ink, pos=top)
                 k += 1
                 img.convert("RGB").save(frames_dir / f"{k:05d}.png", compress_level=1)
         for f in range(1, END_FRAMES + 1):
             k += 1
-            end_card((T and (int(T.s * 1920), int(T.s * 1080))), T, f, last_city).convert("RGB").save(frames_dir / f"{k:05d}.png", compress_level=1)
+            end_card(size, T, f, last_city).convert("RGB").save(frames_dir / f"{k:05d}.png", compress_level=1)
         print("## frames", k)
 
     wav = out / f"mix-{a.music}.wav"
     mix(wav, dur, a.music, cuts)
     if a.only_audio:
         return
-    mp4 = out / f"hero-16x9-{a.quality}-{a.music}.mp4"
+    mp4 = out / f"hero-{a.aspect}-{a.quality}-{a.music}.mp4"
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-framerate", str(FPS), "-i", str(frames_dir / "%05d.png"), "-i", str(wav),
                     "-c:v", "libx264", "-preset", "slow", "-crf", "18", "-pix_fmt", "yuv420p", "-movflags", "+faststart",
                     "-c:a", "aac", "-b:a", "192k", "-shortest", str(mp4)], check=True)

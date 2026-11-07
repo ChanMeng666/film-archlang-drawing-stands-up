@@ -10,6 +10,8 @@ F_END = 192  # 8 s
 MARGIN, STREET, ROW_W = 4.0, 3.0, 125.0
 
 a = lib.args()
+V = a.aspect == "9x16"
+TOWN_ASPECT = 0.62 if V else 1.75  # town w/h that fills the frame at the end elevation
 lib.reset()
 sc = lib.setup_render(a, frames=(1, F_END))
 sc.view_settings.exposure = 0.15
@@ -54,8 +56,8 @@ def pack(row_w):
     return spots, max_w, -y - STREET
 
 
-best = min((pack(rw) for rw in range(60, 420, 5)),
-           key=lambda r: abs(r[1] / r[2] - 1.75) + 0.002 * (r[1] * r[2]) ** 0.5)
+best = min((pack(rw) for rw in range(30, 420, 5)),
+           key=lambda r: abs(r[1] / r[2] - TOWN_ASPECT) + 0.002 * (r[1] * r[2]) ** 0.5)
 for (p, _), (ox, oy) in zip(plans, best[0]):
     p.root.location = (ox, oy, 0)
 lib.bpy.context.view_layer.update()
@@ -67,7 +69,7 @@ for p, (x0, y0, x1, y1) in plans:
     print("## PLOT", p.root.name, [round(v, 1) for v in (x0 + p.root.location.x, y0 + p.root.location.y, x1 + p.root.location.x, y1 + p.root.location.y)])
 total_w, total_h = max(xs) - min(xs), max(ys) - min(ys)
 centre = lib.Vector(((max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2, 0))
-END_W = max(total_w, total_h * 16 / 9) * 1.08
+END_W = (max(total_w, total_h * 0.88 * 9 / 16) if V else max(total_w, total_h * 16 / 9)) * 1.08
 
 lib.add_ground("#10141f", size=1200, rough=0.6)
 sky = lib.Sky(elev=-6, azim=250, sun_strength=0.0, sky_strength=0.5, sky_saturation=0.9)
@@ -86,13 +88,47 @@ cam = lib.Cam()
 cam.dof(2.0)
 
 
-def cam_at(f):
+FIT = [1.0, 0.0, 0.0]  # end-frame correction: width scale, shift x, shift y (vertical only)
+
+
+def cam_at(f, key=True):
     t = lib.smooth((f - 8) / (F_END - 8))
     tgt = hc.lerp(centre, lib.smooth((f - 20) / (F_END - 20)))
     dist = lib.lerp(26, END_W * 1.3, lib.ease_out(t, 2.2))
-    cam.place(tgt, dist, lib.lerp(24, 62, t), lib.lerp(30, 6, t),
-              lib.Cam.lens_for_width(lib.lerp(24, END_W, lib.ease_out(t, 2.2)), dist), frame=f)
+    k = lib.ease_out(t, 2.2)
+    width = lib.lerp(19 if V else 24, END_W * lib.lerp(1.0, FIT[0], k), k)
+    cam.place(tgt, dist, lib.lerp(24, 62, t), lib.lerp(30, 6, t), lib.Cam.lens_for_width(width, dist),
+              frame=f if key else None, shift=(FIT[1] * k, FIT[2] * k))
 
+
+if V:  # perspective makes the near rows larger: fit the town's corners into the last frame
+    from bpy_extras.object_utils import world_to_camera_view
+    corners = [lib.Vector((x, y, 0)) for p, (x0, y0, x1, y1) in plans
+               for x, y in ((x0 + p.root.location.x, y0 + p.root.location.y), (x1 + p.root.location.x, y0 + p.root.location.y),
+                            (x0 + p.root.location.x, y1 + p.root.location.y), (x1 + p.root.location.x, y1 + p.root.location.y))]
+
+    def measure():
+        cam_at(F_END, key=False)
+        lib.bpy.context.view_layer.update()
+        uv = [world_to_camera_view(sc, cam.ob, c) for c in corners]
+        us, vs = [q.x for q in uv], [q.y for q in uv]
+        return min(us), max(us), min(vs), max(vs)
+
+    for _ in range(6):
+        u0, u1, v0, v1 = measure()
+        FIT[0] *= max((u1 - u0) / 0.92, (v1 - v0) / 0.90)
+        u0, u1, v0, v1 = measure()
+        base = ((u0 + u1) / 2, (v0 + v1) / 2)
+        FIT[1] += 0.01
+        du = ((sum(measure()[:2]) / 2) - base[0]) / 0.01
+        FIT[1] -= 0.01
+        FIT[2] += 0.01
+        dv = ((sum(measure()[2:]) / 2) - base[1]) / 0.01
+        FIT[2] -= 0.01
+        FIT[1] -= (base[0] - 0.5) / du
+        FIT[2] -= (base[1] - 0.47) / dv  # a little low: the caption sits on top
+    print("## FIT", [round(v, 3) for v in FIT], [round(v, 3) for v in measure()])
+    cam._prev = None
 
 lib.keyframes(1, F_END, cam_at)
 lib.run("s03_city_of_code", a)

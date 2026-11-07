@@ -1,10 +1,10 @@
 # ArchLang Cinematic
 
-[![The drawing stands up: a floor plan compiled by ArchLang, with the same building's walls rising out of it in 3D](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/archlang-cinematic-hero-16x9-1080p.mp4)
+[![The drawing stands up: a floor plan compiled by ArchLang, with the same building's walls rising out of it in 3D](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/archlang-cinematic-hero-16x9-1080p.mp4)
 
 <p align="center"><strong>A floor plan written as text, compiled, and then made to stand up.</strong><br>
 Blender-rendered promo films and stills for <a href="https://github.com/ChanMeng666/archlang">ArchLang</a>, the open-source language that compiles text into precise floor plans.<br>
-▶ <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/archlang-cinematic-hero-16x9-1080p.mp4">Watch the 32-second hero film</a> · <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.2.0">All assets (v0.2.0)</a></p>
+▶ <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/archlang-cinematic-hero-16x9-1080p.mp4">Watch the 32-second hero film</a> · <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/archlang-cinematic-hero-9x16-1080p.mp4">9:16 vertical</a> · <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.3.0">All assets (v0.3.0)</a></p>
 
 Every wall, door, window, room and piece of furniture on screen was produced by the compiler.
 `archlang compile` draws the dimensioned sheet, and `archlang3d build` turns the same `.arch`
@@ -15,15 +15,15 @@ geometry.
 
 | | |
 |---|---|
-| [![Drawing stands up](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/01-drawing-stands-up-social.png) **The drawing stands up.** The compiled sheet, with the building risen out of it in exact register. | [![Dusk dollhouse](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/02-dusk-dollhouse-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/02-dusk-dollhouse-social.png) **99 lines. 11 rooms. 163 m².** The courtyard house at blue hour, roof off, every room lit. |
-| [![City of code](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/03-city-of-code-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/03-city-of-code-social.png) **13 buildings. None drawn by hand.** Each one stands on a crop of its own compiled sheet. | [![Exploded axonometric](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/04-exploded-axon-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/04-exploded-axon-social.png) **One file. Every layer.** Slab, floors, furniture, walls and roof of a two-storey villa, separated. |
+| [![Drawing stands up](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/01-drawing-stands-up-social.png) **The drawing stands up.** The compiled sheet, with the building risen out of it in exact register. | [![Dusk dollhouse](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/02-dusk-dollhouse-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/02-dusk-dollhouse-social.png) **99 lines. 11 rooms. 163 m².** The courtyard house at blue hour, roof off, every room lit. |
+| [![City of code](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/03-city-of-code-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/03-city-of-code-social.png) **13 buildings. None drawn by hand.** Each one stands on a crop of its own compiled sheet. | [![Exploded axonometric](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/04-exploded-axon-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/04-exploded-axon-social.png) **One file. Every layer.** Slab, floors, furniture, walls and roof of a two-storey villa, separated. |
 
-[![Code to form](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/05-code-to-form-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.2.0/05-code-to-form-social.png)
+[![Code to form](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/05-code-to-form-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/05-code-to-form-social.png)
 
 **Code to form:** the real source of `courtyard-house.arch` beside the building it compiles to.
 
 The stills are 2560×1440. Captioned versions (`*-social`) and text-free versions (`*-clean`) are attached
-to the [release](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.2.0).
+to the [release](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.3.0).
 
 ## The hero film
 
@@ -37,9 +37,17 @@ to the [release](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/
 | 0:21 | **Exploded axonometric** | One GLB separates into its layers, storey by storey. |
 | 0:27 | **End card** | *Designs that compile.* `npx @chanmeng666/archlang` |
 
-> **v0.2.0 is the final cut**: 1920×1080, 64 EEVEE samples, rendered on a laptop's integrated
-> GPU in about 6.5 hours. A 9:16 vertical cut will follow in a later release. The 720p review cut
-> stays in [v0.1.0](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.1.0).
+Both films are final: 64 EEVEE samples, each rendered on a laptop's integrated GPU in about
+6 hours. The 720p review cut stays in [v0.1.0](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.1.0).
+
+| Film | Size | Use |
+|---|---|---|
+| [`archlang-cinematic-hero-16x9-1080p.mp4`](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/archlang-cinematic-hero-16x9-1080p.mp4) | 1920×1080 | YouTube, X, LinkedIn, websites |
+| [`archlang-cinematic-hero-9x16-1080p.mp4`](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.3.0/archlang-cinematic-hero-9x16-1080p.mp4) | 1080×1920 | Reels, TikTok, Shorts, Stories |
+
+The vertical cut is re-framed in Blender, not cropped from the 16:9 frames. Each shot sets its own
+vertical camera, the city is re-packed into a taller town, and its last frame is fitted by
+projecting every plot corner into the camera. Captions sit at the top, clear of the apps' bottom bars.
 
 ## How it works
 
@@ -83,6 +91,7 @@ python scripts/render.py s01_stands_up --anim --quality review # frames; repeat 
 python compose/film.py --quality review --music a-new-life     # captions + score + mp4
 bash scripts/stills.sh                                         # 2560×1440 final stills
 python scripts/render_final.py                                 # final 1080p film: all shots, then compose
+python scripts/render_final.py --aspect 9x16                   # the same for the vertical cut
 ```
 
 | Quality | Resolution (16:9) | EEVEE samples | Use |
@@ -94,7 +103,9 @@ python scripts/render_final.py                                 # final 1080p fil
 `scripts/render.py` runs one Blender process at a time at below-normal priority. Renders resume
 where they stopped, because existing frames are skipped. `scripts/render_final.py` renders every
 shot at `final` quality with 4 threads (`RENDER_THREADS`), waits before each shot until 2 GB of
-memory is free (`MIN_FREE_GB`), logs to `out/film/render-final.log`, then composes the film. On a
+memory is free (`MIN_FREE_GB`), stops Blender if free memory stays under `LOW_FREE_GB` (default
+1 GB) for a minute and resumes when it recovers, logs to `out/film/render-final.log`, then composes
+the film. On a
 Ryzen 7 5700U the four shots took 22, 80, 16 and 270 minutes; the night city is the slowest.
 
 ## Layout
