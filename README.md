@@ -1,10 +1,10 @@
-# ArchLang Cinematic
+# film-archlang-drawing-stands-up
 
-[![The drawing stands up: a floor plan compiled by ArchLang, with the same building's walls rising out of it in 3D](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-hero-16x9-1080p.mp4)
+[![The drawing stands up: a floor plan compiled by ArchLang, with the same building's walls rising out of it in 3D](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-hero-16x9-1080p.mp4)
 
 <p align="center"><strong>A floor plan written as text, compiled, and then made to stand up.</strong><br>
 Blender-rendered promo films and stills for <a href="https://github.com/ChanMeng666/archlang">ArchLang</a>, the open-source language that compiles text into precise floor plans.<br>
-▶ <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-hero-16x9-1080p.mp4">Watch the 32-second hero film</a> · <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-hero-9x16-1080p.mp4">9:16 vertical</a> · <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-code-to-form-16x9-1080p.mp4">Code to form (12 s)</a> · <a href="https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.4.0">All assets (v0.4.0)</a></p>
+▶ <a href="https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-hero-16x9-1080p.mp4">Watch the 32-second hero film</a> · <a href="https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-hero-9x16-1080p.mp4">9:16 vertical</a> · <a href="https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-code-to-form-16x9-1080p.mp4">Code to form (12 s)</a> · <a href="https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/tag/v0.4.0">All assets (v0.4.0)</a></p>
 
 Every wall, door, window, room and piece of furniture on screen was produced by the compiler.
 `archlang compile` draws the dimensioned sheet, and `archlang3d build` turns the same `.arch`
@@ -15,22 +15,22 @@ geometry.
 
 | | |
 |---|---|
-| [![Drawing stands up](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/01-drawing-stands-up-social.png) **The drawing stands up.** The compiled sheet, with the building risen out of it in exact register. | [![Dusk dollhouse](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/02-dusk-dollhouse-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/02-dusk-dollhouse-social.png) **99 lines. 11 rooms. 163 m².** The courtyard house at blue hour, roof off, every room lit. |
-| [![City of code](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/03-city-of-code-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/03-city-of-code-social.png) **13 buildings. None drawn by hand.** Each one stands on a crop of its own compiled sheet. | [![Exploded axonometric](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/04-exploded-axon-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/04-exploded-axon-social.png) **One file. Every layer.** Slab, floors, furniture, walls and roof of a two-storey villa, separated. |
+| [![Drawing stands up](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/01-drawing-stands-up-social.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/01-drawing-stands-up-social.png) **The drawing stands up.** The compiled sheet, with the building risen out of it in exact register. | [![Dusk dollhouse](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/02-dusk-dollhouse-social.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/02-dusk-dollhouse-social.png) **99 lines. 11 rooms. 163 m².** The courtyard house at blue hour, roof off, every room lit. |
+| [![City of code](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/03-city-of-code-social.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/03-city-of-code-social.png) **13 buildings. None drawn by hand.** Each one stands on a crop of its own compiled sheet. | [![Exploded axonometric](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/04-exploded-axon-social.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/04-exploded-axon-social.png) **One file. Every layer.** Slab, floors, furniture, walls and roof of a two-storey villa, separated. |
 
-[![Code to form](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/05-code-to-form-social.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/05-code-to-form-social.png)
+[![Code to form](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/05-code-to-form-social.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/05-code-to-form-social.png)
 
 **Code to form:** the real source of `courtyard-house.arch` beside the building it compiles to.
 
 Every still comes in three aspects, each framed in Blender rather than cropped: 16:9 at 2560×1440,
 9:16 at 1440×2560 (`*-9x16`, for Stories) and 1:1 at 2048×2048 (`*-1x1`, for feeds). Captioned
 versions (`*-social`) and text-free versions (`*-clean`) are attached to the
-[release](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.4.0). In 9:16 and 1:1,
+[release](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/tag/v0.4.0). In 9:16 and 1:1,
 still 05 is the code-to-form clip's last beat: every wall line lit beside every wall.
 
 | 9:16 | 1:1 |
 |---|---|
-| [![Dusk dollhouse, 9:16](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/02-dusk-dollhouse-social-9x16.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/02-dusk-dollhouse-social-9x16.png) | [![Code to form, 1:1](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/05-code-to-form-social-1x1.jpg)](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/05-code-to-form-social-1x1.png) |
+| [![Dusk dollhouse, 9:16](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/02-dusk-dollhouse-social-9x16.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/02-dusk-dollhouse-social-9x16.png) | [![Code to form, 1:1](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/05-code-to-form-social-1x1.jpg)](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/05-code-to-form-social-1x1.png) |
 
 ## The hero film
 
@@ -45,12 +45,12 @@ still 05 is the code-to-form clip's last beat: every wall line lit beside every 
 | 0:27 | **End card** | *Designs that compile.* `npx @chanmeng666/archlang` |
 
 Both films are final: 64 EEVEE samples, each rendered on a laptop's integrated GPU in about
-6 hours. The 720p review cut stays in [v0.1.0](https://github.com/ChanMeng666/archlang-cinematic/releases/tag/v0.1.0).
+6 hours. The 720p review cut stays in [v0.1.0](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/tag/v0.1.0).
 
 | Film | Size | Use |
 |---|---|---|
-| [`archlang-cinematic-hero-16x9-1080p.mp4`](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-hero-16x9-1080p.mp4) | 1920×1080 | YouTube, X, LinkedIn, websites |
-| [`archlang-cinematic-hero-9x16-1080p.mp4`](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-hero-9x16-1080p.mp4) | 1080×1920 | Reels, TikTok, Shorts, Stories |
+| [`archlang-cinematic-hero-16x9-1080p.mp4`](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-hero-16x9-1080p.mp4) | 1920×1080 | YouTube, X, LinkedIn, websites |
+| [`archlang-cinematic-hero-9x16-1080p.mp4`](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-hero-9x16-1080p.mp4) | 1080×1920 | Reels, TikTok, Shorts, Stories |
 
 The vertical cut is re-framed in Blender, not cropped from the 16:9 frames. Each shot sets its own
 vertical camera, the city is re-packed into a taller town, and its last frame is fitted by
@@ -65,8 +65,8 @@ matched by the compiler, not by hand. The code panel shows the file's real line 
 
 | Film | Size |
 |---|---|
-| [`archlang-cinematic-code-to-form-16x9-1080p.mp4`](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-code-to-form-16x9-1080p.mp4) | 1920×1080 |
-| [`archlang-cinematic-code-to-form-9x16-1080p.mp4`](https://github.com/ChanMeng666/archlang-cinematic/releases/download/v0.4.0/archlang-cinematic-code-to-form-9x16-1080p.mp4) | 1080×1920 |
+| [`archlang-cinematic-code-to-form-16x9-1080p.mp4`](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-code-to-form-16x9-1080p.mp4) | 1920×1080 |
+| [`archlang-cinematic-code-to-form-9x16-1080p.mp4`](https://github.com/ChanMeng666/film-archlang-drawing-stands-up/releases/download/v0.4.0/archlang-cinematic-code-to-form-9x16-1080p.mp4) | 1080×1920 |
 
 ## How it works
 
