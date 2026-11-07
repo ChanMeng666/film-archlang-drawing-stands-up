@@ -6,7 +6,8 @@ watchdog stops Blender if free memory stays under LOW_FREE_GB for a minute, wait
 MIN_FREE_GB again and resumes; frames already written are kept. Then composes the film.
 Log: out/film/render-final.log
 
-  python scripts/render_final.py [--aspect 16x9|9x16]
+  python scripts/render_final.py [--aspect 16x9|9x16]                       # the hero film
+  python scripts/render_final.py --aspect 9x16 --only s05_code_to_form      # the code-to-form clip
 """
 import argparse
 import ctypes
@@ -18,6 +19,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SHOTS = [("s01_stands_up", 156), ("s02_dusk_dollhouse", 168), ("s04_exploded_axon", 144), ("s03_city_of_code", 192)]
+CLIPS = {"s05_code_to_form": (240, "compose/code_to_form.py")}  # standalone shots and their compositor
 MIN_FREE_GB = float(os.environ.get("MIN_FREE_GB", "2.0"))
 LOW_FREE_GB = float(os.environ.get("LOW_FREE_GB", "1.0"))
 LOG = ROOT / "out" / "film" / "render-final.log"
@@ -83,9 +85,12 @@ def render(shot, aspect):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--aspect", default="16x9", choices=["16x9", "9x16"])
-    aspect = ap.parse_args().aspect
+    ap.add_argument("--only", choices=list(CLIPS), help="render one standalone clip instead of the hero film")
+    args = ap.parse_args()
+    aspect = args.aspect
+    shots = [(args.only, CLIPS[args.only][0])] if args.only else SHOTS
     os.environ.setdefault("RENDER_THREADS", "4")
-    for shot, n in SHOTS:
+    for shot, n in shots:
         have = done(shot, aspect)
         if have >= n:
             log(f"{shot}-{aspect}: already complete ({have}/{n})")
@@ -103,9 +108,13 @@ def main():
         if have < n:
             log("stopping: shot incomplete; rerun this script to resume")
             sys.exit(1)
-    log(f"composing film {aspect}")
-    r = subprocess.run([sys.executable, str(ROOT / "compose" / "film.py"), "--quality", "final", "--music", "a-new-life",
-                        "--aspect", aspect])
+    if args.only:
+        log(f"composing {args.only} {aspect}")
+        r = subprocess.run([sys.executable, str(ROOT / CLIPS[args.only][1]), "--quality", "final", "--aspect", aspect])
+    else:
+        log(f"composing film {aspect}")
+        r = subprocess.run([sys.executable, str(ROOT / "compose" / "film.py"), "--quality", "final", "--music", "a-new-life",
+                            "--aspect", aspect])
     log(f"compose exit {r.returncode}")
     sys.exit(r.returncode)
 

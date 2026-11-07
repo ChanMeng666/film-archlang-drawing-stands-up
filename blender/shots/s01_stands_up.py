@@ -10,6 +10,7 @@ F_END = 156  # 6.5 s @ 24
 
 a = lib.args()
 V = a.aspect == "9x16"  # vertical: re-framed here, never cropped
+SQ = a.aspect == "1x1"
 lib.reset()
 sc = lib.setup_render(a, frames=(1, F_END))
 sc.view_settings.exposure = -0.4
@@ -52,12 +53,14 @@ def cam_at(f):
     t = lib.smooth((f - 20) / (F_END - 20))
     tgt = centre
     dist = lib.lerp(320.0, 34.0, lib.ease_out(t, 2))
-    elev = lib.lerp(89.9, 40.0 if V else 31.0, t)
+    elev = lib.lerp(89.9, 40.0 if V else 36.0 if SQ else 31.0, t)
     azim = lib.lerp(0.0, 34.0, t)
-    width = lib.lerp(sheet_w, 25.0 if V else 22.0, t)
+    width = lib.lerp(sheet_w, 25.0 if V else 27.0 if SQ else 22.0, t)
     lens = lib.Cam.lens_for_width(width, dist)
-    move = 0.0 if a.still else lib.smooth((f - 60) / 50)
-    if V:  # film: plan below the code panel
+    move = lib.smooth((f - 60) / 50)
+    if a.still:  # stills have no code panel
+        shift = (0.0, 0.0)
+    elif V:  # film: plan below the code panel
         shift = (0.0, lib.lerp(0.36, 0.0, move))
     else:  # film: plan right of the code panel
         shift = (lib.lerp(-0.19, 0.0, move), 0.0)

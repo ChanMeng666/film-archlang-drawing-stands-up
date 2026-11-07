@@ -52,7 +52,7 @@ def facts(name):
 class Type:
     def __init__(self, w, h):
         self.v = h > w  # vertical: larger type, titles break at double spaces
-        self.s = w / 1270 if self.v else w / 1920
+        self.s = w / 1270 if self.v else w / 1440 if w == h else w / 1920  # square: feed-sized type
         s = self.s
         self.h1 = font("InterDisplay-Bold.ttf", int(74 * s))
         self.h2 = font("InterDisplay-SemiBold.ttf", int(40 * s))
@@ -201,6 +201,12 @@ def mix(out_wav: Path, dur: float, music_key: str, cuts: list):
             "kenney/impactsoft-medium-001-kenney-impact-sounds.ogg"]
     for i in range(0, 20, 2):  # furniture landing in s01 (drop starts 98 + 2i, lands ~10 frames later)
         events.append((SFX + taps[i // 2 % 3], (98 + 2 * i + 10) / FPS, 0.18, ""))
+    render_mix(out_wav, dur, music, offset, events)
+    print(f"## audio: music offset {offset:.2f}s")
+
+
+def render_mix(out_wav: Path, dur: float, music: str, offset: float, events: list):
+    """Music from `offset` plus (file, start s, gain, extra filter) events, two-pass loudnorm to -14 LUFS."""
     inputs = ["-ss", f"{offset:.3f}", "-t", f"{dur:.3f}", "-i", music]
     chains = [f"[0:a]aresample=48000,volume=0.9,afade=t=in:d=0.6,afade=t=out:st={dur - 2.8:.3f}:d=2.8[m]"]
     for k, (path, t, g, extra) in enumerate(events, start=1):
@@ -218,7 +224,7 @@ def mix(out_wav: Path, dur: float, music_key: str, cuts: list):
     ln = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
     subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(raw), "-af", ln + ",aresample=48000", str(out_wav)], check=True, cwd=ROOT)
-    print(f"## audio: music offset {offset:.2f}s, measured {m['input_i']} LUFS -> -14")
+    print(f"## audio: measured {m['input_i']} LUFS -> -14")
 
 
 # ------------------------------------------------------------------ main

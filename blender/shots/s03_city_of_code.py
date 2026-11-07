@@ -11,7 +11,8 @@ MARGIN, STREET, ROW_W = 4.0, 3.0, 125.0
 
 a = lib.args()
 V = a.aspect == "9x16"
-TOWN_ASPECT = 0.62 if V else 1.75  # town w/h that fills the frame at the end elevation
+SQ = a.aspect == "1x1"
+TOWN_ASPECT = 0.62 if V else 1.1 if SQ else 1.75  # town w/h that fills the frame at the end elevation
 lib.reset()
 sc = lib.setup_render(a, frames=(1, F_END))
 sc.view_settings.exposure = 0.15
@@ -69,7 +70,7 @@ for p, (x0, y0, x1, y1) in plans:
     print("## PLOT", p.root.name, [round(v, 1) for v in (x0 + p.root.location.x, y0 + p.root.location.y, x1 + p.root.location.x, y1 + p.root.location.y)])
 total_w, total_h = max(xs) - min(xs), max(ys) - min(ys)
 centre = lib.Vector(((max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2, 0))
-END_W = (max(total_w, total_h * 0.88 * 9 / 16) if V else max(total_w, total_h * 16 / 9)) * 1.08
+END_W = (max(total_w, total_h * 0.88 * (9 / 16 if V else 1.0)) if V or SQ else max(total_w, total_h * 16 / 9)) * 1.08
 
 lib.add_ground("#10141f", size=1200, rough=0.6)
 sky = lib.Sky(elev=-6, azim=250, sun_strength=0.0, sky_strength=0.5, sky_saturation=0.9)
@@ -101,7 +102,7 @@ def cam_at(f, key=True):
               frame=f if key else None, shift=(FIT[1] * k, FIT[2] * k))
 
 
-if V:  # perspective makes the near rows larger: fit the town's corners into the last frame
+if V or SQ:  # perspective makes the near rows larger: fit the town's corners into the last frame
     from bpy_extras.object_utils import world_to_camera_view
     corners = [lib.Vector((x, y, 0)) for p, (x0, y0, x1, y1) in plans
                for x, y in ((x0 + p.root.location.x, y0 + p.root.location.y), (x1 + p.root.location.x, y0 + p.root.location.y),
@@ -126,7 +127,7 @@ if V:  # perspective makes the near rows larger: fit the town's corners into the
         dv = ((sum(measure()[2:]) / 2) - base[1]) / 0.01
         FIT[2] -= 0.01
         FIT[1] -= (base[0] - 0.5) / du
-        FIT[2] -= (base[1] - 0.47) / dv  # a little low: the caption sits on top
+        FIT[2] -= (base[1] - (0.47 if V else 0.52)) / dv  # a little low: the caption sits on top
     print("## FIT", [round(v, 3) for v in FIT], [round(v, 3) for v in measure()])
     cam._prev = None
 

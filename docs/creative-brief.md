@@ -26,7 +26,7 @@ the compiler never produced, and its own v3 brief threw them out. We keep that r
 2. **Dusk dollhouse.** The roof lifts away, the sun sets, and each room's light turns on in source
    order. Warm windows on a blue-hour sky is the most-shared look in architecture visualisation.
 3. **City of code.** A drone pull-up over every example plan the compiler ships, laid out as a town
-   at night. "14 buildings. 0 drawn by hand." Scale is the spectacle.
+   at night. "13 buildings. None drawn by hand." Scale is the spectacle.
 4. **Exploded axonometric.** Slab, floors, walls, glazing, furniture and roof separate in layers
    and rotate. Architecture Twitter/Instagram's favourite diagram, made from one GLB.
 5. **Code ↔ form.** The source sits beside the model; a line highlights, and the wall with that id
@@ -34,7 +34,8 @@ the compiler never produced, and its own v3 brief threw them out. We keep that r
 
 ## Deliverables (round 1)
 
-Stills (PNG, 16:9 master 2560×1440, plus 1:1 and 9:16 crops):
+Stills (PNG, 16:9 master 2560×1440, plus 1:1 at 2048×2048 and 9:16 at 1440×2560, each re-framed in
+Blender, not cropped):
 
 - `01-drawing-stands-up` — the courtyard house half-risen from its own sheet, golden hour
 - `02-dusk-dollhouse` — roofless courtyard house at blue hour, rooms lit
@@ -48,6 +49,8 @@ Film:
   to about −14 LUFS for social. Shots: stands-up → dusk orbit → city pull-up (the drop) →
   exploded axon → end card ("Designs that compile." + `npx @chanmeng666/archlang`).
 - `hero-9x16.mp4` cut-down after the 16:9 is approved (camera re-framed in Blender, not cropped).
+- `code-to-form-16x9.mp4` and `-9x16.mp4` (12.5 s): hook 5 as motion. Each `wall id=…` line lights up
+  while the wall with that id glows plum, in the compiler's order, then every wall pulses at once.
 
 ## Look
 
